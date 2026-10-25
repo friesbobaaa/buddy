@@ -1,0 +1,30 @@
+
+name: Build Buddy for macOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install packaging tools
+        run: python -m pip install pyinstaller pillow
+
+      - name: Build Buddy app
+        run: |
+          pyinstaller --windowed --onedir --name Buddy buddy.pyw
+
+      - name: Upload Buddy app
+        uses: actions/upload-artifact@v4
+        with:
+          name: Buddy-macOS
+          path: dist/Buddy/
